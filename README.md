@@ -58,8 +58,9 @@ This project implements a **1024-bit large number generator** and a **Miller-Rab
 ### Assumptions
 -**Probabilistic Primality:**
 The Miller-Rabin test is probabilistic, meaning it can detect composite numbers with high accuracy but may give false positives for prime numbers. In this implementation, the test is performed 5 times (k = 5) to minimize the error rate.
--**Challenges Faced:**
-Handling Large Numbers:
+
+### Challenges Faced
+-**Handling Large Numbers:**
 Since C++ does not natively support numbers larger than 64 bits, the large number is divided into chunks and stored in a linked list.
 
 -**Modular Exponentiation:**
@@ -71,9 +72,8 @@ Memory needed to be efficiently managed to prevent memory leak.
 ### Screenshort
 ![task 2 s1](https://github.com/user-attachments/assets/8a08a0e7-e266-4052-8ce8-0572deac5ce9)
 
-### Public GitHub Link
-
-Find the project [here](https://github.com/fizza49/DSA-assignment-1.git).
+### GitHub Link
+ [Project](https://github.com/fizza49/DSA-assignment-1.git).
 
 ### Contribution
 [Fizza Kashif](https://github.com/fizza49)
