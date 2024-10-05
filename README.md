@@ -15,10 +15,6 @@ This project simulates the **Round Robin CPU Scheduling Algorithm** using C++. I
 - A fixed quantum of **3 units** is used for each process execution.
 - Processes are dynamically added or removed based on user input and their remaining execution time.
 
-### Public GitHub Link
-
-Find the project [here](https://github.com/fizza49/DSA-assignment-1.git).
-
 ### Challenges Faced
 
 - Managing dynamic addition/removal of processes.
@@ -68,6 +64,10 @@ Efficient modular exponentiation is used to handle large powers during the prima
 -**Memory mangement:**
 Memory needed to be efficiently managed to prevent memory leak.
 
+
+### Public GitHub Link
+
+Find the project [here](https://github.com/fizza49/DSA-assignment-1.git).
 
 ### Contribution
 [Fizza Kashif](https://github.com/fizza49)
