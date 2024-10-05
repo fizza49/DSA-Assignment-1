@@ -27,7 +27,7 @@ Process* insertProcess(Process* end, int process_id, int execution_time) {
     return end;
 }
 
-// Function to remove completed process
+// Function to remove a completed process
 Process* removeProcess(Process* end, Process* removingProcess) {
     if (end == nullptr) return nullptr;
 
@@ -113,7 +113,7 @@ void roundRobinScheduler(Process* end, int quantum) {
 
 int main() {
     Process* end = nullptr;
-    int quantum =3;
+    int quantum =3; //fixed quantum
     // Take user input for initial processes
     int ininum;
     cout << "Enter the number of initial processes: ";
