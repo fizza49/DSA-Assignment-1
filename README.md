@@ -20,6 +20,10 @@ This project simulates the **Round Robin CPU Scheduling Algorithm** using C++. I
 - Managing dynamic addition/removal of processes.
 - Handling circular linked list operations efficiently.
 
+ ### Screenshorts
+ ![task 1 s1](https://github.com/user-attachments/assets/f3344056-b385-478a-8387-8a83a2e0003f)
+
+![task 1 s2](https://github.com/user-attachments/assets/7d7821df-7df5-41e6-86f5-1eef8fc2f58b)
 
 
 ## 1024-bit Large Number Prime Checker
@@ -64,6 +68,8 @@ Efficient modular exponentiation is used to handle large powers during the prima
 -**Memory mangement:**
 Memory needed to be efficiently managed to prevent memory leak.
 
+### Screenshort
+![task 2 s1](https://github.com/user-attachments/assets/8a08a0e7-e266-4052-8ce8-0572deac5ce9)
 
 ### Public GitHub Link
 
