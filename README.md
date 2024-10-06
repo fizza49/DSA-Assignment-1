@@ -69,8 +69,41 @@ Efficient modular exponentiation is used to handle large powers during the prima
 -**Memory mangement:**
 Memory needed to be efficiently managed to prevent memory leak.
 
+### Approch 2
+
+## Overview
+
+This C++ program checks the primality of a large number (up to **309 digits**) using a linked list. Each node in the linked list stores a 64-bit segment of the number, allowing efficient handling of large numbers. The program uses modular arithmetic across nodes to test divisibility and determine whether the number is prime.
+
+## Assumptions
+
+- **Input**: A numeric string (up to **309 digits**).
+- The input number is divided into 64-bit chunks and stored in a linked list.
+- Only numeric input is valid.
+- Primality is checked by testing divisibility starting from 2 up to the square root of the largest possible `uint64_t` value.
+
+## Approach
+
+1. **Input Handling**:
+   - The user is prompted to enter a number with a maximum length of 309 digits.
+   - Input is validated to ensure it contains only digits.
+
+2. **Linked List Structure**:
+   - The number is split into segments of up to 64-bit size and stored in nodes of a linked list.
+   - The least significant parts of the number are stored in the earlier nodes.
+
+3. **Modular Arithmetic**:
+   - Divisibility across nodes is determined using modular arithmetic, accumulating remainders while traversing the linked list.
+
+4. **Primality Check**:
+   - The program checks divisibility by integers starting from 2 up to the square root of the maximum 64-bit number (`uint64_t`).
+   - If divisible, the number is declared **not prime**; otherwise, it is **probably prime**.
+
+
 ### Screenshort
 ![task 2 s1](https://github.com/user-attachments/assets/8a08a0e7-e266-4052-8ce8-0572deac5ce9)
+
+![task2 s1](https://github.com/user-attachments/assets/13f5a42b-a86c-4247-a5dd-db4fa59d5787)
 
 ### GitHub Link
  [Project](https://github.com/fizza49/DSA-assignment-1.git).
