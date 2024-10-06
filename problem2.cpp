@@ -1,149 +1,155 @@
 #include <iostream>
-#include <cstdlib>
-#include <random>
-#include <ctime>
-#include <cmath>
+#include <string>
+#include <sstream>
+#include <iomanip>
+#include <algorithm>
+#include <vector>
+#include <limits>
+#include <cstdint>
 
-using namespace std;
-
-// Node structure
 struct Node {
-    uint64_t data;
-    Node* next;
-    Node(uint64_t value) {
-        data = value;
-        next = nullptr;
-    }
+    uint64_t value;  // 64-bit integer to store digits
+    Node* next;      // Pointer to the next node
+
+    Node(uint64_t val) : value(val), next(nullptr) {}
 };
 
-class LargeNumber {
+class LinkedList {
+private:
     Node* head;
 
 public:
-    LargeNumber() {
-        head = nullptr;
-    }
+    LinkedList() : head(nullptr) {}
 
-    void addNode(uint64_t node) {
-        Node* newNode = new Node(node);
-        if (!head) {
-            head = newNode;
-            return;
-        }
-
-        Node* current = head;
-        while (current->next) {
-            current = current->next;
-        }
-        current->next = newNode;
-    }
-
-    void randomnumbergenerator() {
-        for (int i = 0; i < 16; i++) {  // 1024/64=16
-            addNode(getRandom64Bit());
-        }
+    void addNode(uint64_t value) {
+        Node* newNode = new Node(value);
+        newNode->next = head; // Insert at the head
+        head = newNode;
     }
 
     void display() {
         Node* current = head;
+        int index = 0; // To keep track of the node index
         while (current) {
-            cout << current->data << " ";
-            current = current->next;
-        }
-        cout << endl;
-    }
-
-    static uint64_t getRandom64Bit() {
-        random_device rd;         // Use random device for randomness
-        mt19937_64 gen(rd());     // Mersenne Twister engine for 64-bit
-        uniform_int_distribution<uint64_t> dist(0, UINT64_MAX);
-        return dist(gen);
-    }
-
-    // Miller-Rabin primality test
-    bool isPrime(uint64_t n, int k = 5) {
-        if (n <= 1) return false;
-        if (n <= 3) return true;
-        if (n % 2 == 0) return false;
-
-        // Find r and d such that n = 2^r * d + 1
-        uint64_t d = n - 1;
-        int r = 0;
-        while (d % 2 == 0) {
-            d /= 2;
-            r++;
-        }
-
-        // Perform k tests
-        for (int i = 0; i < k; i++) {
-            uint64_t a = 2 + rand() % (n - 4);
-            uint64_t x = modularExponentiation(a, d, n);
-            if (x == 1 || x == n - 1) continue;
-
-            bool found = false;
-            for (int j = 0; j < r - 1; j++) {
-                x = modularExponentiation(x, 2, n);
-                if (x == n - 1) {
-                    found = true;
-                    break;
-                }
+            if (index == 0) {
+                std::cout << "Head: " << current->value << std::endl;
+            } else {
+                std::cout << "Node " << index << ": " << current->value << std::endl;
             }
-
-            if (!found) return false;
-        }
-        return true;
-    }
-
-    // Modular exponentiation
-    uint64_t modularExponentiation(uint64_t base, uint64_t exp, uint64_t mod) {
-        uint64_t result = 1;
-        base = base % mod;
-        while (exp > 0) {
-            if (exp % 2 == 1) result = (result * base) % mod;
-            exp = exp >> 1;
-            base = (base * base) % mod;
-        }
-        return result;
-    }
-
-    // Check primality of the 1024-bit number
-    bool checkPrimality() {
-        uint64_t total = 0;
-        Node* current = head;
-
-        // Combine 64-bit nodes into a single number
-        while (current) {
-            total = (total << 64) | current->data; // Shift and add node
             current = current->next;
+            index++;
         }
-
-        return isPrime(total);
     }
 
-    // Destructor to free memory
-    ~LargeNumber() {
+    void clear() {
         Node* current = head;
         while (current) {
             Node* temp = current;
-            current = current->next; // Move to the next Node
-            delete temp;            // Delete the current Node
+            current = current->next;
+            delete temp;
         }
+        head = nullptr;
+    }
+
+    Node* getHead() {
+        return head;
+    }
+
+    // Function to check divisibility across nodes (starting from the least significant)
+    bool isDivisibleBy(uint64_t divisor) {
+        if (divisor == 0) {
+            std::cerr << "Divisor cannot be zero!" << std::endl;
+            return false; // Cannot divide by zero
+        }
+
+        // Use a vector to reverse the order of nodes for processing
+        std::vector<uint64_t> values; // Vector to store node values
+        Node* current = head;
+
+        // Store all node values in a vector
+        while (current) {
+            values.push_back(current->value);
+            current = current->next;
+        }
+
+        uint64_t remainder = 0;
+        // Iterate through the vector in reverse order
+        for (int i = values.size() - 1; i >= 0; --i) {
+            remainder = (remainder + values[i]) % divisor; // Update remainder
+            if (i > 0) { // If not the last node, multiply remainder by 10^20
+                remainder = (remainder * 10000000000ULL) % divisor;
+            }
+        }
+
+        return remainder == 0; // If remainder is 0, the number is divisible by the divisor
+    }
+
+    // Function to check if the number is prime
+    void checkPrime() {
+        const uint64_t maxLimit = std::numeric_limits<uint64_t>::max();
+        bool isProbablyPrime = true;
+
+        // Check for divisibility starting from 2 to the square root of the maximum limit
+        for (uint64_t divisor = 2; divisor * divisor <= maxLimit; ++divisor) {
+            if (isDivisibleBy(divisor)) {
+                std::cout << "The number is NOT prime (divisible by " << divisor << ")." << std::endl;
+                isProbablyPrime = false;
+                break; // Exit the loop on first found divisor
+            }
+        }
+
+        if (isProbablyPrime) {
+            std::cout << "The number is probably prime." << std::endl;
+        }
+    }
+
+    ~LinkedList() {
+        clear();
     }
 };
 
 int main() {
-    LargeNumber largenumber;
-    largenumber.randomnumbergenerator();
-    cout << "Number: ";
-    largenumber.display();
+    std::string input;
+    std::cout << "Enter a number (up to 309 digits): ";
+    std::cin >> input;
 
-    // Check if the 1024-bit number is prime
-    if (largenumber.checkPrimality()) {
-        cout << "The number is prime." << endl;
+    // Check if input is valid
+    if (input.length() > 309 || !std::all_of(input.begin(), input.end(), ::isdigit)) {
+        std::cerr << "Invalid input! Please enter a numeric value with up to 309 digits." << std::endl;
+        return 1;
     }
-    else {
-        cout << "The number is not prime." << endl;
+
+    LinkedList list;
+    std::string segment;
+
+    // Process the input number into segments
+    int totalLength = input.length();
+    int msbDigits = totalLength > 9 ? 9 : totalLength; // Most significant digits (MSB)
+    segment = input.substr(0, msbDigits);
+    uint64_t msbValue = std::stoull(segment);
+    list.addNode(msbValue);
+
+    // Remaining digits (complete 20 digits for each node)
+    for (size_t i = msbDigits; i < totalLength; i += 20) {
+        segment = input.substr(i, 20);
+        // If segment has less than 20 digits, pad with zeros
+        if (segment.length() < 20) {
+            segment.insert(segment.begin(), 20 - segment.length(), '0');
+        }
+        uint64_t value = std::stoull(segment);
+        list.addNode(value);
     }
+
+    // Display the linked list with labels
+    std::cout << "\nLinked List Nodes:" << std::endl;
+    list.display();
+
+    // Display the complete number
+    std::cout << "\nComplete number: " << input << std::endl;
+    std::cout << "Number of digits: " << totalLength << std::endl;
+
+    // Check for primality
+    list.checkPrime();
 
     return 0;
 }
